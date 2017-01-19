@@ -1,5 +1,5 @@
 
-#webpay-node
+#webpay-nodejs
 
 Módulo no oficial para integrar WebPay Plus en Node.js, con soporte para promesas.
 
