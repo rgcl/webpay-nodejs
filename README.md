@@ -13,7 +13,7 @@ npm install webpay-nodejs --save
 
 La explicación detallada de los ejemplos de código está en /tests
 
-1.  Instanciar
+1)  Instanciar
 
 ```js
 const WebPay = require('webpay-nodejs');
@@ -26,7 +26,7 @@ let wp = new WebPay({
 });
 ```
 
-2. Iniciar Transacción
+2) Iniciar Transacción
 
 ```js
 wp.initTransaction({
@@ -40,7 +40,7 @@ wp.initTransaction({
 })
 ```
 
-3. Obtener datos de la transacción
+3) Obtener datos de la transacción
 
 ```js
 wp.getTransactionResult(token).then((transaccion) => {
@@ -48,7 +48,7 @@ wp.getTransactionResult(token).then((transaccion) => {
 })
 ```
 
-4. Aceptar la transacción
+4) Aceptar la transacción
 
 ```js
 wp.acknowledgeTransaction(token)
