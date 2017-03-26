@@ -74,6 +74,7 @@ app.post('/pagar', (req, res) => {
 app.post('/verificar', (req, res) => {
 
     let token = req.body.token_ws;
+    let transaction;
 
     // Si toodo está ok, Transbank realizará esta petición para que le vuelvas a confirmar la transacción.
 
@@ -81,8 +82,12 @@ app.post('/verificar', (req, res) => {
      * 3. Cuando el usuario ya haya pagado con el banco, Transbank realizará una petición a esta url,
      * porque así se definió en initTransaction
      */
-    wp.getTransactionResult(token).then((transaction) => {
+    console.log('pre token', token);
+    wp.getTransactionResult(token).then((transactionResult) => {
+        transaction = transactionResult;
         transactions[transaction.buyOrder] = transaction;
+
+        console.log('transaction', transaction);
         /**
          * 4. Como resultado, obtendras transaction, que es un objeto con la información de la transacción.
          * Independiente de si la transacción fue correcta o errónea, debes siempre
@@ -90,17 +95,15 @@ app.post('/verificar', (req, res) => {
          *
          * Tienes 30 amplios segundos para hacer esto, sino la transacción se reversará.
          */
+        console.log('re acknowledgeTransaction', token)
         return wp.acknowledgeTransaction(token);
 
-    }).then(() => {
-        
+    }).then((result2) => {
+        console.log('pos acknowledgeTransaction', result2);
         // Si llegas aquí, entonces la transacción fue confirmada.
         // Este es un buen momento para guardar la información y actualizar tus registros (disminuir stock, etc).
 
-        // Por <del>capricho</del> reglamento de Transbank, debes retornar una página en blanco con el fondo
-        // psicodélico de WebPay. Debes usar este gif: https://webpay3g.transbank.cl/webpayserver/imagenes/background.gif
-        // o bien usar la librería.
-        res.send(WebPay.getHtmlTransitionPage());
+        res.send(WebPay.getHtmlTransitionPage(transaction.urlRedirection, token));
     });
     
 });
