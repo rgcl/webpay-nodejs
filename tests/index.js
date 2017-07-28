@@ -1,4 +1,5 @@
 "use strict";
+
 const WebPay = require('../lib/webpay');
 const fs = require('fs');
 const express = require('express');
@@ -23,7 +24,8 @@ let wp = new WebPay({
     commerceCode: 597020000541,
     publicKey: publicKey,
     privateKey: privateKey,
-    webpayKey: webpayKey
+    webpayKey: webpayKey,
+    verbose: true
 });
 
 app.get('/', (req, res) => {
@@ -103,6 +105,9 @@ app.post('/verificar', (req, res) => {
         // Si llegas aquí, entonces la transacción fue confirmada.
         // Este es un buen momento para guardar la información y actualizar tus registros (disminuir stock, etc).
 
+        // Por reglamento de Transbank, debes retornar una página en blanco con el fondo
+        // psicodélico de WebPay. Debes usar este gif: https://webpay3g.transbank.cl/webpayserver/imagenes/background.gif
+        // o bien usar la librería.
         res.send(WebPay.getHtmlTransitionPage(transaction.urlRedirection, token));
     });
     
