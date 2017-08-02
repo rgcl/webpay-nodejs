@@ -130,9 +130,9 @@ app.post('/anular', (req, res) => {
     const transaction = transactions[req.body.buyOrden];
 
     wp.nullify({
-        authorizationCode: transaction.detailOutput[0].authorizationCode,
-        authorizedAmount: transaction.detailOutput[0].amount,
-        nullifyAmount: transaction.detailOutput[0].amount,
+        authorizationCode: transaction.detailOutput.authorizationCode,
+        authorizedAmount: transaction.detailOutput.amount,
+        nullifyAmount: transaction.detailOutput.amount,
         buyOrder: transaction.buyOrder
     }).then((result) => {
         console.log('anulación:', result);
