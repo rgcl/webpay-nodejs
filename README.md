@@ -22,7 +22,8 @@ let wp = new WebPay({
     commerceCode: youCommerceCode,
     publicKey: youPublicKey,
     privateKey: youPrivateKey,
-    webpayKey: youWebpayKey
+    webpayKey: youWebpayKey,
+    env: WebPay.ENV.INTEGRACION
 });
 ```
 
@@ -53,6 +54,25 @@ wp.getTransactionResult(token).then((transaccion) => {
 ```js
 wp.acknowledgeTransaction(token)
 ```
+
+
+Opcionalmente; Anular
+```js
+wp.nullify({
+authorizationCode: '123',
+authorizedAmount: 2000,
+buyOrder: buyOrder
+})
+```
+
+#Breaking Changes v1.0.0
+
+* getTransactionResult retornaba transaction.detailOutput como un array con un único objeto
+las propiedades, ahora transaction.detailOutput retorna directamente dicho objeto.
+
+  * Ejemplo antes: transaction.detailOutput[0].amount
+  * Ejemplo ahora: transaction.detailOutput.amount
+
 
 #Legalidades
 

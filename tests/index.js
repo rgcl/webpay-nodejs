@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 let transactions = {};
+let transactionsByToken = {};
 let app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -88,6 +89,7 @@ app.post('/verificar', (req, res) => {
     wp.getTransactionResult(token).then((transactionResult) => {
         transaction = transactionResult;
         transactions[transaction.buyOrder] = transaction;
+        transactionsByToken[token] = transactions[transaction.buyOrder];
 
         console.log('transaction', transaction);
         /**
@@ -115,6 +117,27 @@ app.post('/verificar', (req, res) => {
 
 app.post('/comprobante', (req, res) => {
     console.log('Mostrar el comprobante');
+    const transaction = transactionsByToken[req.body.token_ws];
+    let html = JSON.stringify(transaction);
+    html += '<hr>';
+    html += '<form action="/anular" method="post"><input type="hidden" name="buyOrden" value="' + transaction.buyOrder +
+        '"><input type="submit" value="Anular"></form>'
+    return res.send(html);
+});
+
+app.post('/anular', (req, res) => {
+
+    const transaction = transactions[req.body.buyOrden];
+
+    wp.nullify({
+        authorizationCode: transaction.detailOutput[0].authorizationCode,
+        authorizedAmount: transaction.detailOutput[0].amount,
+        nullifyAmount: transaction.detailOutput[0].amount,
+        buyOrder: transaction.buyOrder
+    }).then((result) => {
+        console.log('anulación:', result);
+        return res.send('Bla bla comprobante:' + JSON.stringify(transaction));
+    });
 });
 
 
