@@ -1,6 +1,6 @@
 {
   "name": "webpay-nodejs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WebPay Plus implementation in Node.js",
   "main": "index.js",
   "dependencies": {
