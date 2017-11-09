@@ -1,2 +1,2 @@
 
-module.exports = require('./lib/webpay');
+module.exports = require('./lib/WebPay');

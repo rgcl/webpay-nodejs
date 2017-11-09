@@ -1,32 +1,30 @@
 "use strict";
 
-const WebPay = require('../lib/webpay');
-const fs = require('fs');
+const WebPay = require('../lib/WebPay');
 const express = require('express');
 const bodyParser = require('body-parser');
 
 let transactions = {};
 let transactionsByToken = {};
 let app = express();
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 
-let publicKey = fs.readFileSync(__dirname + '/cert/597020000541.crt');
-let privateKey = fs.readFileSync(__dirname + '/cert/597020000541.key');
-let webpayKey = fs.readFileSync(__dirname + '/cert/tbk.pem');
+const cert = require('./cert/normal');
 
 /**
  * 1. Instanciamos la clase WebPay.
  *
- * Notar que los certificados sin simples strings, no buffer de archivos ni nada esotérico o místico.
+ * Notar que los certificados son simples strings, no buffer de archivos ni nada esotérico o místico.
  *
  * @type {WebPay}
  */
 let wp = new WebPay({
-    commerceCode: 597020000541,
-    publicKey: publicKey,
-    privateKey: privateKey,
-    webpayKey: webpayKey,
-    verbose: true
+    commerceCode: cert.commerceCode,
+    publicKey: cert.publicKey,
+    privateKey: cert.privateKey,
+    webpayKey: cert.webpayKey,
+    verbose: true,
+    env: WebPay.ENV.INTEGRACION
 });
 
 app.get('/', (req, res) => {
@@ -125,7 +123,7 @@ app.post('/comprobante', (req, res) => {
     return res.send(html);
 });
 
-app.post('/anular', (req, res) => {
+app.post('/anular', (req, res) => { // Notar que WebPay no permite anular RedCompra. Solo tarjetas de crédito
 
     const transaction = transactions[req.body.buyOrden];
 
