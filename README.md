@@ -12,7 +12,7 @@ npm install webpay-nodejs
 
 # Transacción normal
 
-La explicación detallada de los ejemplos de código está en /tests
+La explicación detallada de los ejemplos de código está en /showcase
 
 1)  Instanciar
 
