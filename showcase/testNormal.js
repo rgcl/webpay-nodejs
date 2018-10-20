@@ -116,10 +116,19 @@ app.post('/verificar', (req, res) => {
 app.post('/comprobante', (req, res) => {
     console.log('Mostrar el comprobante');
     const transaction = transactionsByToken[req.body.token_ws];
-    let html = JSON.stringify(transaction);
-    html += '<hr>';
-    html += '<form action="/anular" method="post"><input type="hidden" name="buyOrden" value="' + transaction.buyOrder +
-        '"><input type="submit" value="Anular"></form>'
+    let html;
+    if (transaction) {
+        // La transacción fue aprobada
+        html = JSON.stringify(transaction);
+        html += '<hr>';
+        html += '<form action="/anular" method="post">' +
+                    '<input type="hidden" name="buyOrden" value="' + transaction.buyOrder + '">' +
+                    '<input type="submit" value="Anular">' +
+                '</form>';
+    } else {
+        // La transacción fue cancelada
+        html = 'Transacción ' + req.body.TBK_ORDEN_COMPRA + ' cancelada';
+    }
     return res.send(html);
 });
 
