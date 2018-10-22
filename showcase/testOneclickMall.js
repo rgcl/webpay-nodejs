@@ -3,6 +3,7 @@
 const WebPay = require('../lib/WebPay');
 const express = require('express');
 const bodyParser = require('body-parser');
+const onError = require('./onError');
 
 let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -69,9 +70,7 @@ app.post('/inscripcion', (req, res) => {
         <p>Cargando...</p>
         </body></html>
         `);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 
 });
 
@@ -108,7 +107,7 @@ app.post('/inscripcion-result', (req, res) => {
         </form>
     </body>
 </html>`);
-    });
+    }).catch(onError(res));
 
 });
 
@@ -119,9 +118,7 @@ app.post('/eliminarTarjeta', (req, res) => {
         tbkUser: req.body.tbkUser
     }).then((data) => {
         res.end(JSON.stringify(data));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 
 });
 
@@ -188,17 +185,13 @@ app.post('/pagar', (req, res) => {
                 </form>
             </body>
         </html>`);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 });
 
 app.post('/reversar', (req, res) => {
     wp.oneclickmall.reverse(req.body.buyOrder).then((result) => {
         return res.send('Transacción reversada:' + JSON.stringify(result));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 });
 
 app.post('/anular', (req, res) => {
@@ -228,9 +221,7 @@ app.post('/anular', (req, res) => {
                 </form>
             </body>
         </html>`);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 });
 
 app.post('/deshacerAnular', (req, res) => {
@@ -240,12 +231,10 @@ app.post('/deshacerAnular', (req, res) => {
         nullifyAmount: parseInt(req.body.nullifyAmount)
     }).then((result) => {
         return res.send('Pago anulado revalidado:' + JSON.stringify(result));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+    }).catch(onError(res));
 });
 
 
 app.listen(3000, () => {
-    console.log('Server OK')
+    console.log('Server OK in http://localhost:3000');
 });

@@ -3,6 +3,7 @@
 const WebPay = require('../lib/WebPay');
 const express = require('express');
 const bodyParser = require('body-parser');
+const onError = require('./onError');
 
 let transactions = {};
 let transactionsByToken = {};
@@ -68,7 +69,7 @@ app.post('/pagar', (req, res) => {
         // Transbank recomienda POST, el cual se debe hacer por el lado del cliente, obteniendo
         // esta info por AJAX... al final es lo mismo, así que no estresarse.
         res.redirect(data.url + '?token_ws=' + data.token);
-    });
+    }).catch(onError(res));
 
 });
 
@@ -109,7 +110,7 @@ app.post('/verificar', (req, res) => {
         // psicodélico de WebPay. Debes usar este gif: https://webpay3g.transbank.cl/webpayserver/imagenes/background.gif
         // o bien usar la librería.
         res.send(WebPay.getHtmlTransitionPage(transaction.urlRedirection, token));
-    });
+    }).catch(onError(res));
     
 });
 
@@ -135,10 +136,10 @@ app.post('/anular', (req, res) => { // Notar que WebPay no permite anular RedCom
     }).then((result) => {
         console.log('anulación:', result);
         return res.send('Bla bla comprobante:' + JSON.stringify(transaction));
-    });
+    }).catch(onError(res));
 });
 
 
 app.listen(3000, () => {
-    console.log('Server OK')
+    console.log('Server OK in http://localhost:3000');
 });

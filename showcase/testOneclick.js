@@ -3,6 +3,7 @@
 const WebPay = require('../lib/WebPay');
 const express = require('express');
 const bodyParser = require('body-parser');
+const onError = require('./onError');
 
 let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -104,7 +105,7 @@ app.post('/inscripcion-result', (req, res) => {
         </form>
     </body>
 </html>`);
-    });
+    }).catch(onError(res));
 
 });
 
@@ -115,7 +116,7 @@ app.post('/eliminarTarjeta', (req, res) => {
         tbkUser: req.body.tbkUser
     }).then((data) => {
         res.end(JSON.stringify(data));
-    });
+    }).catch(onError(res));
 
 });
 
@@ -149,7 +150,7 @@ app.post('/pagar', (req, res) => {
                 </form>
             </body>
         </html>`);
-    });
+    }).catch(onError(res));
 
 });
 
@@ -157,10 +158,10 @@ app.post('/anular', (req, res) => {
 
     wp.oneclick.codeReverseOneClick(parseInt(req.body.buyOrder)).then((result) => {
         return res.send('Pago reversado:' + JSON.stringify(result));
-    });
+    }).catch(onError(res));
 });
 
 
 app.listen(3000, () => {
-    console.log('Server OK')
+    console.log('Server OK in http://localhost:3000');
 });
