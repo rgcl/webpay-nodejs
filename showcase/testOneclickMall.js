@@ -3,6 +3,7 @@
 const WebPay = require('../lib/WebPay');
 const express = require('express');
 const bodyParser = require('body-parser');
+const onError = require('./onError');
 
 let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,16 +18,16 @@ const cert = require('./cert/oneClickMall');
  * @type {WebPay}
  */
 let wp = new WebPay({
-    commerceCode: cert.commerceCode,
-    publicKey: cert.publicKey,
-    privateKey: cert.privateKey,
-    webpayKey: cert.webpayKey,
-    verbose: true,
-    env: WebPay.ENV.INTEGRACION
+  commerceCode: cert.commerceCode,
+  publicKey: cert.publicKey,
+  privateKey: cert.privateKey,
+  webpayKey: cert.webpayKey,
+  verbose: true,
+  env: WebPay.ENV.INTEGRACION
 });
 
 app.get('/', (req, res) => {
-    res.send(`
+  res.send(`
 <!DOCTYPE html>
 <html>
     <head>
@@ -47,20 +48,20 @@ app.get('/', (req, res) => {
 let username;
 app.post('/inscripcion', (req, res) => {
 
-    let url = 'http://' + req.get('host');
+  let url = 'http://' + req.get('host');
 
-    // Esto es un ejemplo. Obviamente en la vida real se usan bases de datos o alguna forma de persistencia
-    username = req.body.username;
+  // Esto es un ejemplo. Obviamente en la vida real se usan bases de datos o alguna forma de persistencia
+  username = req.body.username;
 
-    /**
-     *
-     */
-    wp.oneclickmall.initInscription({
-        username: req.body.username,
-        email: req.body.email,
-        returnUrl: url + '/inscripcion-result'
-    }).then((data) => {
-        res.end(`
+  /**
+   *
+   */
+  wp.oneclickmall.initInscription({
+    username: req.body.username,
+    email: req.body.email,
+    returnUrl: url + '/inscripcion-result'
+  }).then((data) => {
+    res.end(`
         <html><head><meta charset="UTF-8"><style>*{font-family: sans-serif;}</style>
         </head><body onload="document.getElementById('form').submit()">
         <form action="${data.urlInscriptionForm}" id="form" method="post">
@@ -69,22 +70,20 @@ app.post('/inscripcion', (req, res) => {
         <p>Cargando...</p>
         </body></html>
         `);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  }).catch(onError(res));
 
 });
 
 app.post('/inscripcion-result', (req, res) => {
 
-    let url = 'http://' + req.get('host');
-    let token = req.body.TBK_TOKEN;
+  let url = 'http://' + req.get('host');
+  let token = req.body.TBK_TOKEN;
 
-    wp.oneclickmall.finishInscription(token).then((data) => {
+  wp.oneclickmall.finishInscription(token).then((data) => {
 
-        let dataStr = JSON.stringify(data);
+    let dataStr = JSON.stringify(data);
 
-        res.send(`
+    res.send(`
 <!DOCTYPE html>
 <html>
     <head>
@@ -108,51 +107,49 @@ app.post('/inscripcion-result', (req, res) => {
         </form>
     </body>
 </html>`);
-    });
+  }).catch(onError(res));
 
 });
 
 app.post('/eliminarTarjeta', (req, res) => {
 
-    wp.oneclickmall.removeInscription({
-        username: req.body.username,
-        tbkUser: req.body.tbkUser
-    }).then((data) => {
-        res.end(JSON.stringify(data));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  wp.oneclickmall.removeInscription({
+    username: req.body.username,
+    tbkUser: req.body.tbkUser
+  }).then((data) => {
+    res.end(JSON.stringify(data));
+  }).catch(onError(res));
 
 });
 
 app.post('/pagar', (req, res) => {
 
-    let buyOrderBase = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
-    let buyOrder = buyOrderBase + "000";
-    let subBuyOrder1 = buyOrderBase + "001";
-    let subBuyOrder2 = buyOrderBase + "002";
+  let buyOrderBase = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
+  let buyOrder = buyOrderBase + "000";
+  let subBuyOrder1 = buyOrderBase + "001";
+  let subBuyOrder2 = buyOrderBase + "002";
 
-    wp.oneclickmall.authorize({
-        tbkUser: req.body.tbkUser,
-        username: username,
-        buyOrder: buyOrder,
-        storesInput: [{
-            commerceId: 597020000585,
-            buyOrder: subBuyOrder1,
-            amount: parseInt(req.body.amount1),
-            sharesNumber: 0
-        }, {
-            commerceId: 597020000586,
-            buyOrder: subBuyOrder2,
-            amount: parseInt(req.body.amount2),
-            sharesNumber: 0
-        }]
-    }).then((data) => {
-        // Por simplicidad del ejemplo se estan pasando los parametros a
-        // traves del cliente de usando inputs, lo correcto es manejar estos
-        // datos solo en backend
-        const dataStr = JSON.stringify(data);
-        res.send(`
+  wp.oneclickmall.authorize({
+    tbkUser: req.body.tbkUser,
+    username: username,
+    buyOrder: buyOrder,
+    storesInput: [{
+      commerceId: 597020000585,
+      buyOrder: subBuyOrder1,
+      amount: parseInt(req.body.amount1),
+      sharesNumber: 0
+    }, {
+      commerceId: 597020000586,
+      buyOrder: subBuyOrder2,
+      amount: parseInt(req.body.amount2),
+      sharesNumber: 0
+    }]
+  }).then((data) => {
+    // Por simplicidad del ejemplo se estan pasando los parametros a
+    // traves del cliente de usando inputs, lo correcto es manejar estos
+    // datos solo en backend
+    const dataStr = JSON.stringify(data);
+    res.send(`
         <!DOCTYPE html>
         <html>
             <head>
@@ -188,29 +185,25 @@ app.post('/pagar', (req, res) => {
                 </form>
             </body>
         </html>`);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  }).catch(onError(res));
 });
 
 app.post('/reversar', (req, res) => {
-    wp.oneclickmall.reverse(req.body.buyOrder).then((result) => {
-        return res.send('Transacción reversada:' + JSON.stringify(result));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  wp.oneclickmall.reverse(req.body.buyOrder).then((result) => {
+    return res.send('Transacción reversada:' + JSON.stringify(result));
+  }).catch(onError(res));
 });
 
 app.post('/anular', (req, res) => {
-    wp.oneclickmall.nullify({
-        commerceId: req.body.commerceId,
-        buyOrder: req.body.buyOrder,
-        authorizedAmount: parseInt(req.body.authorizedAmount),
-        authorizationCode: req.body.authorizationCode,
-        nullifyAmount: parseInt(req.body.amount)
-    }).then((data) => {
-        const dataStr = JSON.stringify(data);
-        return res.send(`
+  wp.oneclickmall.nullify({
+    commerceId: req.body.commerceId,
+    buyOrder: req.body.buyOrder,
+    authorizedAmount: parseInt(req.body.authorizedAmount),
+    authorizationCode: req.body.authorizationCode,
+    nullifyAmount: parseInt(req.body.amount)
+  }).then((data) => {
+    const dataStr = JSON.stringify(data);
+    return res.send(`
         <!DOCTYPE html>
         <html>
             <head>
@@ -228,24 +221,20 @@ app.post('/anular', (req, res) => {
                 </form>
             </body>
         </html>`);
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  }).catch(onError(res));
 });
 
 app.post('/deshacerAnular', (req, res) => {
-    wp.oneclickmall.reverseNullification({
-        buyOrder: req.body.buyOrder,
-        commerceId: req.body.commerceId,
-        nullifyAmount: parseInt(req.body.nullifyAmount)
-    }).then((result) => {
-        return res.send('Pago anulado revalidado:' + JSON.stringify(result));
-    }, (err) => {
-        return res.send('Error:' + JSON.stringify(err.response));
-    });
+  wp.oneclickmall.reverseNullification({
+    buyOrder: req.body.buyOrder,
+    commerceId: req.body.commerceId,
+    nullifyAmount: parseInt(req.body.nullifyAmount)
+  }).then((result) => {
+    return res.send('Pago anulado revalidado:' + JSON.stringify(result));
+  }).catch(onError(res));
 });
 
 
 app.listen(3000, () => {
-    console.log('Server OK')
+  console.log('Server OK in http://localhost:3000');
 });
