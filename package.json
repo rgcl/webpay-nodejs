@@ -9,8 +9,8 @@
     "pem": "^1.9.4",
     "soap": "^0.18.0",
     "ursa-purejs": "0.0.3",
-    "xml-crypto": "^0.8.5",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.1.27",
+    "xml-crypto": "^0.8.5"
   },
   "devDependencies": {
     "body-parser": "^1.16.0",

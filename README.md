@@ -68,7 +68,7 @@ buyOrder: buyOrder
 
 Para los métodos de OneClick, usar `wp.oneclick.*` y `wp.onclickmall.*` respectivamente.
 
-# Versiones
+# Changelog
 
 ## v1.3.0
 
