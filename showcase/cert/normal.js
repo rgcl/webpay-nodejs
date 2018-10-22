@@ -4,7 +4,7 @@ module.exports.commerceCode = '597020000540';
 module.exports.env = "INTEGRACION";
 
 module.exports.publicKey =
-`-----BEGIN CERTIFICATE-----
+  `-----BEGIN CERTIFICATE-----
 MIIDeDCCAmACCQDjtGVIe/aeCTANBgkqhkiG9w0BAQsFADB+MQswCQYDVQQGEwJj
 bDENMAsGA1UECAwEc3RnbzENMAsGA1UEBwwEc3RnbzEMMAoGA1UECgwDdGJrMQ0w
 CwYDVQQLDARjY3JyMRUwEwYDVQQDDAw1OTcwMjAwMDA1NDAxHTAbBgkqhkiG9w0B
@@ -27,7 +27,7 @@ WnWrkcr2qakpHzERn8irKBPhvlifW5sdMH4tz/4SLVwkek24Sp8CVmIIgQR3nyR9
 -----END CERTIFICATE-----`;
 
 module.exports.privateKey =
-`-----BEGIN RSA PRIVATE KEY-----
+  `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAvuNgBxMAOBlNI7Fw5sHGY1p6DB6EMK83SL4b1ZILSJs/8/MC
 X8Pkys3CvJmSIiKU7fnWkgXchEdqXJV+tzgoED/y99tXgoMssi0ma+u9YtPvpT7B
 a5rk5HpLuaFNeuE3l+mpkXDZZKFSZJ1fV/Hyn3A1Zz+7+X2qiGrAWWdjeGsIkz4r
