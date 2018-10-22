@@ -12,7 +12,7 @@ npm install webpay-nodejs
 
 # Transacción normal
 
-La explicación detallada de los ejemplos de código está en /tests
+> Revisa el directorio /showcase para ver ejemplos funcionando
 
 1)  Instanciar
 
@@ -21,9 +21,9 @@ const WebPay = require('webpay-nodejs');
 
 let wp = new WebPay({
     commerceCode: youCommerceCode,
-    publicKey: youPublicKey,
-    privateKey: youPrivateKey,
-    webpayKey: youWebpayKey,
+    publicKey: youPublicKey, // .cert file
+    privateKey: youPrivateKey, // .key file
+    webpayKey: youWebpayKey, // .pem file
     env: WebPay.ENV.INTEGRACION
 });
 ```
@@ -57,7 +57,7 @@ wp.acknowledgeTransaction(token)
 ```
 
 
-Opcionalmente; Anular
+Opcionalmente, anular
 ```js
 wp.nullify({
 authorizationCode: '123',
@@ -66,9 +66,17 @@ buyOrder: buyOrder
 })
 ```
 
-Para los métodos de OneClick, usar `wp.oneclick.*`
+Para los métodos de OneClick, usar `wp.oneclick.*` y `wp.onclickmall.*` respectivamente.
 
 # Versiones
+
+## v1.3.0
+
+* Se agregó soporte para WebPay OneClick Mall. Gracias [Alonso Gaete](https://github.com/alogaete)! (#6).
+* Correcciones menores internas al manejo de errores (no implica cambios en la API).
+* Los ejemplos ahora manejan los errores (solo a modo de demostración).
+* Se actualizaron los certificados de WebPay Normal.
+* Se eliminaron dependencias sin uso.
 
 ## v1.2.0
 
