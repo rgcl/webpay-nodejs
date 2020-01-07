@@ -7,10 +7,10 @@
     "decimal.js-light": "^2.2.3",
     "node-uuid": "^1.4.7",
     "pem": "^1.9.4",
-    "soap": "^0.18.0",
+    "soap": "^0.30.0",
     "ursa-purejs": "0.0.3",
-    "xmldom": "^0.1.27",
-    "xml-crypto": "^0.8.5"
+    "xml-crypto": "^0.8.5",
+    "xmldom": "^0.1.27"
   },
   "devDependencies": {
     "body-parser": "^1.16.0",
