@@ -21,8 +21,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sapienman/webpay-nodejs.git"
+    "url": "https://github.com/rgcl/webpay-nodejs.git"
   },
-  "author": "Rodrigo González Castillo <hola@rodrigo.systems>",
+  "author": "Rodrigo González Castillo <r.gnzlz.cstll@gmail.com>",
   "license": "LGPL"
 }
