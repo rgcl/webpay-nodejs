@@ -13,6 +13,7 @@ npm install webpay-nodejs
 # Transacción normal
 
 > Revisa el directorio /showcase para ver ejemplos funcionando
+> `$ node showcase/test<DesiredTest>`
 
 1)  Instanciar
 
@@ -60,9 +61,9 @@ wp.acknowledgeTransaction(token)
 Opcionalmente, anular
 ```js
 wp.nullify({
-authorizationCode: '123',
-authorizedAmount: 2000,
-buyOrder: buyOrder
+    authorizationCode: '123',
+    authorizedAmount: 2000,
+    buyOrder: buyOrder
 })
 ```
 
@@ -70,13 +71,25 @@ Para los métodos de OneClick, usar `wp.oneclick.*` y `wp.onclickmall.*` respect
 
 # Changelog
 
+# v1.4.0
+> Las versiones anteriores tienen problemas de seguridad en sus dependencias. Se recomienda actualizar 
+> a ésta versión como punto mínimo.
+
+* Se agregaron dependencias faltantes (ejs). Notificado por [ffflabs](https://github.com/ffflabs) (#15).
+* Se agregó una versión propia de ursa, y actualización de soap. Ahora la instalación no tiene problemas de 
+seguridad. Gracias [nicolaslopezj](https://github.com/nicolaslopezj) (#20).
+* Se corrigieron problemas en los ejemplos. Gracias [DiruzCode](https://github.com/DiruzCode) (#17), 
+[Rubenazo](https://github.com/DiruzCode) (#9).
+* Agregado soporte parcial para pagos diferidos (Falta documentación). [BluebambooSRL](https://github.com/BluebambooSRL) (#11).
+* Se agregó más formalismo en la licencia (archivos COPYING, COPYING.LESEER). La licencia sigue siendo la misma, LGPL.
+
 ## v1.3.0
 
 * Se agregó soporte para WebPay OneClick Mall. Gracias [Alonso Gaete](https://github.com/alogaete)! (#6).
 * Correcciones menores internas al manejo de errores (no implica cambios en la API).
 * Los ejemplos ahora manejan los errores (solo a modo de demostración).
 * Se actualizaron los certificados de WebPay Normal.
-* Se eliminaron dependencias sin uso.
+* Se eliminaron dependencias sin uso. 
 
 ## v1.2.0
 
@@ -103,7 +116,4 @@ de Transbank.
 Agradecimientos a [Leonardo Gatica](https://github.com/lgaticaq/tbk-oneclick) por descubrir el significado de
 los códigos de respuesta de WebPay OneClick desde el número -8 al -1.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Licencia LGPL.
-
+Éste código se distribuye con la licencia libre LGPL. Revisar COPYING.LESSER para detalles.
