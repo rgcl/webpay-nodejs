@@ -10,7 +10,7 @@
     "soap": "^0.30.0",
     "ursa-purejs2020": "0.0.4",
     "xml-crypto": "^0.8.5",
-    "xmldom": "^0.1.27",
+    "xmldom": "^0.5.0",
     "ejs": "^3.0.1"
   },
   "devDependencies": {
